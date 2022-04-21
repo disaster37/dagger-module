@@ -3,6 +3,7 @@ package helm
 
 import (
 	"dagger.io/dagger"
+  "dagger.io/dagger/core"
 	"universe.dagger.io/docker"
 )
 
@@ -27,10 +28,9 @@ import (
 
     _defaultImage: #DefaultImage & {}
 
-    if values == "" {
-        _values: ""
-    } else {
-        _write:    core.#WriteFile & {
+    _values: ""
+   if values != "" {
+        _write:    core.#WriteFile & {a
 			input:      dagger.#Scratch
 			path:       "values.yaml"
 			contents: values
@@ -39,15 +39,14 @@ import (
     }
     
 
-    if repository == "" {
-        _repo: "."
-    } else {
+    _repo: "."
+    if repository != "" {
         _repo: "\(repository)/\(chart)"
     }
 
-    if version == "" {
-        _version = []
-    } else {
+    _version: [...string]
+    _version: []
+    if version != "" {
         _version: ["--version", version]
     }
 
