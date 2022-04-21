@@ -34,7 +34,7 @@ import (
 	}
 }
 
-#Repo: {
+#Repository: {
     // The helm repository to add
     repositories: [repoName=string] {
         // The repisitory URL
