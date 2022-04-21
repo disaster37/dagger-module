@@ -36,7 +36,7 @@ import (
 
 #Repository: {
     // The helm repository to add
-    repositories: [repoName=string] {
+    repositories: [repoName=string]: {
         // The repisitory URL
         url: string
     }
@@ -44,18 +44,39 @@ import (
     // The docker image to use
     input: docker.#Image | *_defaultImage.output
 
+    // Environment variables
+	  proxy: string | *""
+    noProxy: string | *""
+
     _defaultImage: #DefaultImage & {}
 
-    for repoName, repo in repositories {
-        docker.#Run & {
+    docker.#Build & {
+      steps: [
+        docker.#Step & {
+          output: input
+        },
+        for repoName, repo in repositories {
+          docker.#Run & {
             command: {
-                name:   "repo"
-                "args":
-                - "add"
-                - repoName
-                - repo.url
+              name: "repo"
+              args: ["add", repoName, repo.url]
             }
-            input: input
-        }
+            env: {
+                if proxy != "" {
+                    http_proxy: proxy
+                    https_proxy: proxy
+                }
+                if noProxy != "" {
+                    no_proxy: noProxy
+                }
+            }
+          }
+        },
+      ]
     }
+}
+
+#Install: {
+
+
 }
