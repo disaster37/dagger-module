@@ -8,6 +8,10 @@ import (
 	"universe.dagger.io/docker"
 )
 
+#image: docker.#Pull & {
+    source: "alpine/helm:latest"
+}
+
 #Lint: {
 
     // The source directory that contain helm charts
@@ -25,6 +29,9 @@ import (
 			contents: directory
 			dest:     directory
 		}
+        if input == |_ {
+            input: #image
+        }
 	}
 
 }
