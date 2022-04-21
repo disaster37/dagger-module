@@ -36,10 +36,7 @@ import (
 
 #Repo: {
     // The helm repository to add
-    repo: {
-        // The repository name
-        name: string
-
+    repositories: [repoName=string] {
         // The repisitory URL
         url: string
     }
@@ -49,14 +46,16 @@ import (
 
     _defaultImage: #DefaultImage & {}
 
-    docker.#Run & {
-		command: {
-		    name:   "repo"
-			"args":
-              - "add"
-              - repo.name
-              - repo.url
-		}
-        input: input
-	}
+    for repoName, repo in repositories {
+        docker.#Run & {
+            command: {
+                name:   "repo"
+                "args":
+                - "add"
+                - repoName
+                - repo.url
+            }
+            input: input
+        }
+    }
 }
