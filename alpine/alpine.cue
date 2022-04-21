@@ -41,15 +41,15 @@ import (
 						}
 					}
           
-          env: {
-              if proxy != "" {
-                  http_proxy: proxy
-                  https_proxy: proxy
-              }
-              if noProxy != "" {
-                  no_proxy: noProxy
-              }
-          }
+                    env: {
+                        if proxy != "" {
+                            http_proxy: proxy
+                            https_proxy: proxy
+                        }
+                        if noProxy != "" {
+                            no_proxy: noProxy
+                        }
+                    }
 				}
 			},
 		]
