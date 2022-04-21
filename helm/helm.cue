@@ -3,86 +3,60 @@ package helm
 
 import (
 	"dagger.io/dagger"
-	"dagger.io/dagger/core"
-
 	"universe.dagger.io/docker"
 )
 
-#image: docker.#Pull & {
-    source: "alpine/helm:latest"
-}
-
+// Permit to run helm lint
 #Lint: {
 
     // The source directory that contain helm charts
     directory: dagger.#FS
 
     // The relative path from `directory` where to lint 
-    path: string | *"./"
+    chart: string | *"."
+
+    // The docker image to use
+    input: docker.#Image | *_defaultImage.output
+
+    _defaultImage: #DefaultImage & {}
 
     docker.#Run & {
 		command: {
-			name:   "helm"
-			"args": ["lint", path]
+		    name:   "lint"
+			"args": [chart]
 		}
 		mounts: "helm charts": {
 			contents: directory
-			dest:     directory
+			dest:     "/src"
 		}
-        if input == |_ {
-            input: #image
-        }
+        workdir: "/src"
+        input: input
 	}
-
 }
 
-// Run a bash script in a Docker container
-//  Since this is a thin wrapper over docker.#Run, we embed it.
-//  Whether to embed or wrap is a case-by-case decision, like in Go.
-#Run: {
-	// The script to execute
-	script: {
-		// A directory containing one or more bash scripts
-		directory: dagger.#FS
+#Repo: {
+    // The helm repository to add
+    repo: {
+        // The repository name
+        name: string
 
-		// Name of the file to execute
-		filename: string
+        // The repisitory URL
+        url: string
+    }
 
-		_directory: directory
-		_filename:  filename
-	} | {
-		// Script contents
-		contents: string
+    // The docker image to use
+    input: docker.#Image | *_defaultImage.output
 
-		_filename: "run.sh"
-		_write:    core.#WriteFile & {
-			input:      dagger.#Scratch
-			path:       _filename
-			"contents": contents
-		}
-		_directory: _write.output
-	}
+    _defaultImage: #DefaultImage & {}
 
-	// Arguments to the script
-	args: [...string]
-
-	// Where in the container to mount the scripts directory
-	_mountpoint: "/bash/scripts"
-
-	docker.#Run & {
+    docker.#Run & {
 		command: {
-			name:   "bash"
-			"args": ["\(_mountpoint)/\(script._filename)"] + args
-			// FIXME: make default flags overrideable
-			flags: {
-				"--norc": true
-				"-e":     true
-				"-o":     "pipefail"
-			}
+		    name:   "repo"
+			"args":
+              - "add"
+              - repo.name
+              - repo.url
 		}
-		mounts: "Bash scripts": {
-			contents: script._directory
-			dest:     _mountpoint
-		}
+        input: input
 	}
 }
