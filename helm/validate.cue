@@ -22,12 +22,6 @@ import (
 	// The values contend
     values: dagger.#Secret | *""
 
-	// The proxy chain if needed to access on k8s
-    proxy: string | *""
-
-    // The no proxy chain
-    noProxy: string | *""
-
     // The docker image to use
     input: docker.#Image | *_defaultImage.output
 
@@ -60,9 +54,7 @@ import (
 			dest:     "/src"
 		}
 		env: {
-            http_proxy: proxy
-            https_proxy: proxy
-            no_proxy: noProxy
+			_env
         }
         workdir: "/src"
         input: input
