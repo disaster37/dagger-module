@@ -43,7 +43,7 @@ import (
     docker.#Run & {
 		command: {
 		    name:   "-c"
-			"args": _args
+			"args": _args ["|", "kubeval"]
 		}
 		mounts: "helm charts": {
 			contents: directory
