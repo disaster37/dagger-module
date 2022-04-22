@@ -35,11 +35,11 @@ import (
 
 	_helm: "helm template \(chart)"
 
-	_showOnly: string
+	_showOnly: string | *""
 	if shownOnly != "" {
 		_showOnly: "--show-only \(shownOnly)"
 	}
-	_values: string
+	_values: string | *""
 	if values != "" {
         _write:    core.#WriteFile & {
 			input:      dagger.#Scratch
