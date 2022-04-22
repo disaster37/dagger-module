@@ -5,6 +5,7 @@ import (
 	"dagger.io/dagger"
 	"dagger.io/dagger/core"
 	"universe.dagger.io/docker"
+	"strings"
 )
 
 // Permit to validate helm chart with kubeval
@@ -55,18 +56,13 @@ import (
 	if version != "" {
 		_version: " --kubernetes-version \(version)"
 	}
-	_schema : string | *""
-	if schemas != null {
-		for schema in schemas {
-			"_schema": _schema + " --schema-location \(schema)"
-		}
-	}
+	_schema: [ for _, schema in schemas {" --schema-location \(schema)" }]
 
     docker.#Run & {
 		entrypoint: ["/bin/sh"]
 		command: {
 		    name:   "-c"
-			"args": [_helm + _showOnly + _values + " | kubeconform --verbose --summary --ignore-missing-schemas" + _version + _schema]
+			"args": [_helm + _showOnly + _values + " | kubeconform --verbose --summary --ignore-missing-schemas" + _version + strings.Join(_schema, "")]
 		}
 		mounts: "helm charts": {
 			contents: directory
