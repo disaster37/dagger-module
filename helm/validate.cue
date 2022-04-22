@@ -27,7 +27,7 @@ import (
 
     _defaultImage: #DefaultKubevalImage & {}
 
-	_args: ["helm", "template", chart]
+	_args: [chart]
 
 	if shownOnly != "" {
 		_args: _args + ["--show-only", shownOnly]
@@ -42,9 +42,9 @@ import (
     }
 
     docker.#Run & {
-		entrypoint: ["/bin/sh"]
+		entrypoint: ["helm"]
 		command: {
-		    name:   "-c"
+		    name:   "template"
 			"args": _args + ["|", "kubeval"]
 		}
 		mounts: "helm charts": {
