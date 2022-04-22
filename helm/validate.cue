@@ -22,6 +22,9 @@ import (
 	// The values contend
     values: dagger.#Secret | *""
 
+	// Environment variables
+	env: [string]: string | dagger.#Secret
+
     // The docker image to use
     input: docker.#Image | *_defaultImage.output
 
@@ -53,9 +56,7 @@ import (
 			contents: directory
 			dest:     "/src"
 		}
-		env: {
-			_env
-        }
+		"env": env
         workdir: "/src"
         input: input
 	}
