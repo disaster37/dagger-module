@@ -16,11 +16,11 @@ import (
     // Environment variables
 	env: [string]: string | dagger.#Secret
 
-    kubevalVersion: string | *"latest"
+    kubeconformVersion: string | *"latest"
 
-    _kubevalURL: "https://github.com/instrumenta/kubeval/releases/latest/download/kubeval-linux-amd64.tar.gz"
+    _kubeconformURL: "https://github.com/yannh/kubeconform/releases/latest/download/kubeconform-linux-amd64.tar.gz"
     if  kubevalVersion != "latest" {
-        _kubevalURL: "https://github.com/instrumenta/kubeval/releases/download/\(kubevalVersion)/kubeval-linux-amd64.tar.gz"
+        _kubeconformURL: "https://github.com/yannh/kubeconform/releases/download/\(kubevalVersion)/kubeconform-linux-amd64.tar.gz"
     }
 
     _defaultImage: #DefaultHelmImage & {}
@@ -51,8 +51,8 @@ import (
             docker.#Run & {
                 entrypoint: ["/bin/sh"]
 				command: {
-					name: "/scripts/install_kubeval.sh"
-					args: [_kubevalURL]
+					name: "/scripts/install_kubeconform.sh"
+					args: [_kubeconformURL]
 				}
 				mounts: scripts: {
 					dest:     "/scripts"
