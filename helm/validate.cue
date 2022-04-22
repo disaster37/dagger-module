@@ -45,14 +45,14 @@ import (
 			path:       "values.yaml"
 			contents: values
 		}
-        _script: _script + "-f \(_write.output)"
+        //_script: _script + "-f \(_write.output)"
     }
 
     docker.#Run & {
 		entrypoint: ["/bin/sh"]
 		command: {
 		    name:   "-c"
-			"args": [_script + _showOnly + " | kubeval"]
+			"args": [_helm + _showOnly + " | kubeval"]
 		}
 		mounts: "helm charts": {
 			contents: directory
