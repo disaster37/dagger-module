@@ -39,20 +39,21 @@ import (
 	if shownOnly != "" {
 		_showOnly: "--show-only \(shownOnly)"
 	}
+	_values: string
 	if values != "" {
         _write:    core.#WriteFile & {
 			input:      dagger.#Scratch
 			path:       "values.yaml"
 			contents: values
 		}
-        //_script: _script + "-f \(_write.output)"
+        _values: "-f \(_write.output)"
     }
 
     docker.#Run & {
 		entrypoint: ["/bin/sh"]
 		command: {
 		    name:   "-c"
-			"args": [_helm + _showOnly + " | kubeval"]
+			"args": [_helm + _showOnly + _values + " | kubeval"]
 		}
 		mounts: "helm charts": {
 			contents: directory
