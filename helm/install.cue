@@ -62,7 +62,7 @@ import (
     }
 
     _args: ["--install", name]
-    _mounts: [name=string]: core.#Mount
+    _mounts: [string]: core.#Mount
     _defaultImage: #DefaultHelmImage & {}
 
    if values != "" {
