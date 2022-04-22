@@ -17,7 +17,7 @@ import (
     chart: string | *"."
 
 	// The file to validate on template
-	shownOnly: string | *""
+	showOnly: string | *""
 
 	// The values contend
     values: dagger.#Secret | *""
@@ -36,8 +36,8 @@ import (
 	_helm: "helm template \(chart)"
 
 	_showOnly: string | *""
-	if shownOnly != "" {
-		_showOnly: "--show-only \(shownOnly)"
+	if showOnly != "" {
+		_showOnly: "--show-only \(showOnly)"
 	}
 	_values: string | *""
 	if values != "" {
