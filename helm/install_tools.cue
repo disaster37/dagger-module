@@ -38,10 +38,10 @@ import (
                 output: input
             },
             docker.#Run & {
-                entrypoint: ["/bin/sh", "-c"]
+                entrypoint: ["/bin/sh"]
 				command: {
-					name: "apk"
-					args: ["add", "curl"]
+					name: "-c"
+					args: ["apk", "add", "curl"]
                     flags: {
                         "-U":         true
                     }
