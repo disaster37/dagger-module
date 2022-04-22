@@ -46,6 +46,11 @@ import (
 					dest:     "/scripts"
 					contents: _scripts.output
 				}
+                env: {
+                    http_proxy: proxy
+                    https_proxy: proxy
+                    no_proxy: noProxy
+                }
 			},
         ]
     }
