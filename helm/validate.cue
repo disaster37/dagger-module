@@ -33,10 +33,11 @@ import (
 
     _defaultImage: #DefaultKubevalImage & {}
 
-	_script: "helm template \(chart)"
+	_helm: "helm template \(chart)"
 
+	_showOnly: ""
 	if shownOnly != "" {
-		_script: _script + "--show-only \(shownOnly)"
+		_showOnly: "--show-only \(shownOnly)"
 	}
 	if values != "" {
         _write:    core.#WriteFile & {
@@ -51,7 +52,7 @@ import (
 		entrypoint: ["/bin/sh"]
 		command: {
 		    name:   "-c"
-			"args": [_script + " | kubeval"]
+			"args": [_script + _showOnly + " | kubeval"]
 		}
 		mounts: "helm charts": {
 			contents: directory
