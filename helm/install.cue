@@ -18,11 +18,8 @@ import (
     // The values contend
     values: dagger.#Secret | *""
 
-    // The proxy chain if needed to access on k8s
-    proxy: string | *""
-
-    // The no proxy chain
-    noProxy: string | *""
+    // Environment variables
+	env: [string]: string | dagger.#Secret
 
     // The docker image that contain helm and repositories to use
     input: docker.#Image | *_defaultImage.output
@@ -87,10 +84,8 @@ import (
             }
         }
         env: {
+            env
             KUBECONFIG: "/kubeconfig"
-            http_proxy: proxy
-            https_proxy: proxy
-            no_proxy: noProxy
         }
         workdir: "/src"
         input: input

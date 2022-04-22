@@ -12,11 +12,8 @@ import (
     // The docker image to use
     input: docker.#Image | *_defaultImage.output
 
-    // The proxy chain if needed to access on k8s
-    proxy: string | *""
-
-    // The no proxy chain
-    noProxy: string | *""
+    // Environment variables
+	env: [string]: string | dagger.#Secret
 
     kubevalVersion: string | *"latest"
 
@@ -47,9 +44,7 @@ import (
                     }
 				}
                 env: {
-                    http_proxy: proxy
-                    https_proxy: proxy
-                    no_proxy: noProxy
+                    env
                 }
 			},
             docker.#Run & {
@@ -63,9 +58,7 @@ import (
 					contents: _scripts.output
 				}
                 env: {
-                    http_proxy: proxy
-                    https_proxy: proxy
-                    no_proxy: noProxy
+                    env
                 }
 			},
         ]

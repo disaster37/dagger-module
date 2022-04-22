@@ -16,8 +16,7 @@ import (
     input: docker.#Image | *_defaultImage.output
 
     // Environment variables
-	proxy: string | *""
-    noProxy: string | *""
+	env: [string]: string | dagger.#Secret
 
     _defaultImage: #DefaultHelmImage & {}
 
@@ -33,9 +32,7 @@ import (
                         args: ["add", repoName, repo.url]
                     }
                     env: {
-                        http_proxy: proxy
-                        https_proxy: proxy
-                        no_proxy: noProxy
+                        env
                     }
                 }
             },
@@ -45,9 +42,7 @@ import (
                     args: ["update"]
                 }
                 env: {
-                    http_proxy: proxy
-                    https_proxy: proxy
-                    no_proxy: noProxy
+                    env
                 }
             }
         ]

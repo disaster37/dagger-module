@@ -15,6 +15,9 @@ import (
     // The relative path from `directory` where to lint 
     chart: string | *"."
 
+	// Environment variables
+	env: [string]: string | dagger.#Secret
+
     // The docker image to use
     input: docker.#Image | *_defaultImage.output
 
@@ -28,6 +31,9 @@ import (
 		mounts: "helm charts": {
 			contents: directory
 			dest:     "/src"
+		}
+		env: {
+			env
 		}
         workdir: "/src"
         input: input
