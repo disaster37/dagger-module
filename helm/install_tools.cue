@@ -19,7 +19,7 @@ import (
     kubeconformVersion: string | *"latest"
 
     _kubeconformURL: "https://github.com/yannh/kubeconform/releases/latest/download/kubeconform-linux-amd64.tar.gz"
-    if  kubevalVersion != "latest" {
+    if  kubeconformVersion != "latest" {
         _kubeconformURL: "https://github.com/yannh/kubeconform/releases/download/\(kubevalVersion)/kubeconform-linux-amd64.tar.gz"
     }
 
