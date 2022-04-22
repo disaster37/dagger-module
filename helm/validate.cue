@@ -33,7 +33,7 @@ import (
 		_args: _args + ["--show-only", shownOnly]
 	}
 	if values != "" {
-        _write:    core.#WriteFile & {a
+        _write:    core.#WriteFile & {
 			input:      dagger.#Scratch
 			path:       "values.yaml"
 			contents: values
