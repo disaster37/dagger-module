@@ -38,10 +38,13 @@ import (
                 output: input
             },
             docker.#Run & {
-                entrypoint: ["/bin/sh"]
+                entrypoint: ["/sbin/apk"]
 				command: {
-					name: "-c"
-					args: ["apk", "-U", "add", "curl"]
+					name: "add"
+					args: ["curl"]
+                    flags: {
+                        "-U":         true
+                    }
 				}
                 env: {
                     http_proxy: proxy
