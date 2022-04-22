@@ -41,7 +41,7 @@ import (
                 entrypoint: ["/bin/sh", "-c"]
 				command: {
 					name: "apk"
-					args: ["add", "-u", "curl"]
+					args: ["add", "-U", "curl"]
 				}
                 env: {
                     http_proxy: proxy
