@@ -39,7 +39,7 @@ import (
 						}
 					}
           
-                    env: {
+                    "env": {
                         env
                     }
 				}

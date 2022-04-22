@@ -56,10 +56,10 @@ import (
 			contents: directory
 			dest:     "/src"
 		}
-		env: {
+		"env": {
 			env
 		}
         workdir: "/src"
-        input: input
+        "input": input
 	}
 }

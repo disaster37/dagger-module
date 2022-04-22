@@ -44,7 +44,7 @@ import (
                         "-U":         true
                     }
 				}
-                env: {
+                "env": {
                     env
                 }
 			},
@@ -58,7 +58,7 @@ import (
 					dest:     "/scripts"
 					contents: _scripts.output
 				}
-                env: {
+                "env": {
                     env
                 }
 			},

@@ -83,11 +83,11 @@ import (
                 contents: kubeconfig
             }
         }
-        env: {
+        "env": {
             env
             KUBECONFIG: "/kubeconfig"
         }
         workdir: "/src"
-        input: input
+        "input": input
 	}
 }

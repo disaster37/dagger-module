@@ -32,7 +32,7 @@ import (
                         name: "repo"
                         args: ["add", repoName, repo.url]
                     }
-                    env: {
+                    "env": {
                         env
                     }
                 }
@@ -42,7 +42,7 @@ import (
                     name: "repo"
                     args: ["update"]
                 }
-                env: {
+                "env": {
                     env
                 }
             }
