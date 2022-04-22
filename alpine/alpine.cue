@@ -10,11 +10,8 @@ import (
 	// Alpine version to install.
 	version: string | *"3.15.0@sha256:21a3deaa0d32a8057914f36584b5288d2e5ecc984380bc0118285c70fa8c9300"
 
-    // Proxy chain if needed
-    proxy: string | *""
-
-    // No proxy if needed
-    noProxy: string | *""
+    // Environment variables
+	env: [string]: string | dagger.#Secret
 
 	// List of packages to install
 	packages: [pkgName=string]: {
@@ -42,13 +39,7 @@ import (
 					}
           
                     env: {
-                        if proxy != "" {
-                            http_proxy: proxy
-                            https_proxy: proxy
-                        }
-                        if noProxy != "" {
-                            no_proxy: noProxy
-                        }
+                        env
                     }
 				}
 			},
