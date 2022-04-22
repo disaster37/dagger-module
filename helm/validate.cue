@@ -19,6 +19,12 @@ import (
 	// The file to validate on template
 	showOnly: string | *""
 
+	// The kubernetes version to validate schema
+	version: string | *""
+
+	// The list of URL to validate custom CRDs
+	schemas?: [...string]
+
 	// The values contend
     values: dagger.#Secret | *""
 
@@ -45,12 +51,22 @@ import (
 		}
         _values: "-f \(_write.output)"
     }
+	_version: string | *""
+	if version != "" {
+		_version: "--kubernetes-version \(version)"
+	}
+	_schema : string | *""
+	if schemas != null {
+		for schema in schemas {
+			"_schema": _schema + schema
+		}
+	}
 
     docker.#Run & {
 		entrypoint: ["/bin/sh"]
 		command: {
 		    name:   "-c"
-			"args": [_helm + _showOnly + _values + " | kubeconform --ignore-missing-schemas --strict"]
+			"args": [_helm + _showOnly + _values + " | kubeconform --verbose --summary --ignore-missing-schemas" + _version + _schema]
 		}
 		mounts: "helm charts": {
 			contents: directory
