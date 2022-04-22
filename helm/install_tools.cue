@@ -38,6 +38,7 @@ import (
                 output: input
             },
             docker.#Run & {
+                entrypoint: ["/bin/sh"]
 				command: {
 					name: "/scripts/install_kubeval.sh"
 					args: [_kubevalURL]
