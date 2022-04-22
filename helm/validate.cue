@@ -53,7 +53,7 @@ import (
 		entrypoint: ["/bin/sh"]
 		command: {
 		    name:   "-c"
-			"args": [_helm + _showOnly + _values + " | kubeval"]
+			"args": [_helm + _showOnly + _values + " | kubeval --ignore-missing-schemas"]
 		}
 		mounts: "helm charts": {
 			contents: directory
