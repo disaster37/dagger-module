@@ -1,6 +1,7 @@
 package alpine
 
 import (
+	"dagger.io/dagger"
 	"universe.dagger.io/docker"
 )
 
