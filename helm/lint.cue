@@ -18,7 +18,7 @@ import (
     // The docker image to use
     input: docker.#Image | *_defaultImage.output
 
-    _defaultImage: #DefaultImage & {}
+    _defaultImage: #DefaultHelmImage & {}
 
     docker.#Run & {
 		command: {

@@ -19,7 +19,7 @@ import (
 	proxy: string | *""
     noProxy: string | *""
 
-    _defaultImage: #DefaultImage & {}
+    _defaultImage: #DefaultHelmImage & {}
 
     docker.#Build & {
         steps: [
@@ -33,16 +33,23 @@ import (
                         args: ["add", repoName, repo.url]
                     }
                     env: {
-                        if proxy != "" {
-                            http_proxy: proxy
-                            https_proxy: proxy
-                        }
-                        if noProxy != "" {
-                            no_proxy: noProxy
-                        }
+                        http_proxy: proxy
+                        https_proxy: proxy
+                        no_proxy: noProxy
                     }
                 }
             },
+            docker.#Run & {
+                command: {
+                    name: "repo"
+                    args: ["update"]
+                }
+                env: {
+                    http_proxy: proxy
+                    https_proxy: proxy
+                    no_proxy: noProxy
+                }
+            }
         ]
     }
 }
