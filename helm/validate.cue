@@ -27,10 +27,10 @@ import (
 
     _defaultImage: #DefaultKubevalImage & {}
 
-	_args: ["helm", "template", chart]
+	_script: "helm template \(chart)"
 
 	if shownOnly != "" {
-		_args: _args + ["--show-only", shownOnly]
+		_script: _script + "--show-only \(shownOnly)"
 	}
 	if values != "" {
         _write:    core.#WriteFile & {
@@ -38,16 +38,16 @@ import (
 			path:       "values.yaml"
 			contents: values
 		}
-        _args: _args + ["-f", _write.output]
+        _script: _script + "-f \(_write.output)"
     }
 
-	_args: _args + ["|", "kubeval"]
+	_script: _script + " | kubeval"
 
     docker.#Run & {
 		entrypoint: ["/bin/sh"]
 		command: {
 		    name:   "-c"
-			"args": [_args]
+			"args": [_script]
 		}
 		mounts: "helm charts": {
 			contents: directory
