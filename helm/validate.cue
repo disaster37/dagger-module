@@ -42,7 +42,7 @@ import (
     }
 
     docker.#Run & {
-		entrypoint: "/bin/sh"
+		entrypoint: ["/bin/sh"]
 		command: {
 		    name:   "-c"
 			"args": _args + ["|", "kubeval"]
