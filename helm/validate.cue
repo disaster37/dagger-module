@@ -23,7 +23,7 @@ import (
 	version: string | *""
 
 	// The list of URL to validate custom CRDs
-	schemas?: [...string]
+	schemas: [...string]
 
 	// The values contend
     values: dagger.#Secret | *""
@@ -40,7 +40,7 @@ import (
 
 	_showOnly: string | *""
 	if showOnly != "" {
-		_showOnly: "--show-only \(showOnly)"
+		_showOnly: " --show-only \(showOnly)"
 	}
 	_values: string | *""
 	if values != "" {
@@ -49,16 +49,16 @@ import (
 			path:       "values.yaml"
 			contents: values
 		}
-        _values: "-f \(_write.output)"
+        _values: " -f \(_write.output)"
     }
 	_version: string | *""
 	if version != "" {
-		_version: "--kubernetes-version \(version)"
+		_version: " --kubernetes-version \(version)"
 	}
 	_schema : string | *""
 	if schemas != null {
 		for schema in schemas {
-			"_schema": _schema + schema
+			"_schema": _schema + " --schema-location \(schema)"
 		}
 	}
 
