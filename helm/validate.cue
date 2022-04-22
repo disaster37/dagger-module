@@ -47,7 +47,7 @@ import (
 		entrypoint: ["/bin/sh"]
 		command: {
 		    name:   "-c"
-			"args": [_args...]
+			"args": [_args]
 		}
 		mounts: "helm charts": {
 			contents: directory
