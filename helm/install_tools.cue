@@ -40,6 +40,18 @@ import (
             docker.#Run & {
                 entrypoint: ["/bin/sh"]
 				command: {
+					name: "apk"
+					args: ["add", "-u", "curl"]
+				}
+                env: {
+                    http_proxy: proxy
+                    https_proxy: proxy
+                    no_proxy: noProxy
+                }
+			},
+            docker.#Run & {
+                entrypoint: ["/bin/sh"]
+				command: {
 					name: "/scripts/install_kubeval.sh"
 					args: [_kubevalURL]
 				}
