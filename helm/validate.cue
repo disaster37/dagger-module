@@ -22,6 +22,12 @@ import (
 	// The values contend
     values: dagger.#Secret | *""
 
+	// The proxy chain if needed to access on k8s
+    proxy: string | *""
+
+    // The no proxy chain
+    noProxy: string | *""
+
     // The docker image to use
     input: docker.#Image | *_defaultImage.output
 
@@ -41,18 +47,22 @@ import (
         _script: _script + "-f \(_write.output)"
     }
 
-	_script: _script + " | kubeval"
-
     docker.#Run & {
 		entrypoint: ["/bin/sh"]
 		command: {
 		    name:   "-c"
-			"args": [_script]
+			"args": [_script + " | kubeval"]
 		}
 		mounts: "helm charts": {
 			contents: directory
 			dest:     "/src"
 		}
+		env: {
+            KUBECONFIG: "/kubeconfig"
+            http_proxy: proxy
+            https_proxy: proxy
+            no_proxy: noProxy
+        }
         workdir: "/src"
         input: input
 	}
