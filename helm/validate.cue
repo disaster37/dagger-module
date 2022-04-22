@@ -35,7 +35,7 @@ import (
 
 	_helm: "helm template \(chart)"
 
-	_showOnly: ""
+	_showOnly: string
 	if shownOnly != "" {
 		_showOnly: "--show-only \(shownOnly)"
 	}
