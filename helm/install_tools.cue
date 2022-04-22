@@ -7,7 +7,7 @@ import (
 )
 
 // Permit to build helm image with all tools required
-#Image: {
+#InstallTools: {
 
     // The docker image to use
     input: docker.#Image | *_defaultImage.output
