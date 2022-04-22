@@ -60,7 +60,6 @@ import (
 			dest:     "/src"
 		}
 		env: {
-            KUBECONFIG: "/kubeconfig"
             http_proxy: proxy
             https_proxy: proxy
             no_proxy: noProxy
