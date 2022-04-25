@@ -67,7 +67,7 @@ import (
             docker.#Run & {
                 entrypoint: ["/bin/sh"]
 				command: {
-					name: "/scripts/install_kubeconform.sh"
+					name: "/scripts/install_schema_gen.sh"
 					args: [_helmSchemaGenURL]
 				}
 				mounts: scripts: {

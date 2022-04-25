@@ -22,7 +22,6 @@ import (
     input: docker.#Image | *_defaultImage.output
 
     _defaultImage: #InstallTools & {
-       "env": env
     }
 
     docker.#Run & {
