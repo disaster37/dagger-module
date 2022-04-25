@@ -24,9 +24,10 @@ import (
     _defaultImage: #DefaultHelmImage & {}
 
     docker.#Run & {
+		entrypoint: ["/bin/sh"]
 		command: {
-		    name:   "lint"
-			"args": [chart]
+		    name:   "/usr/bin/helm"
+			"args": ["lint", chart]
 		}
 		mounts: "helm charts": {
 			contents: directory

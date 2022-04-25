@@ -67,7 +67,7 @@ import (
             docker.#Run & {
                 entrypoint: ["/bin/sh"]
 				command: {
-					name: "helm"
+					name: "/usr/bin/helm"
 					args: ["plugin", "install", _helmSchemaGenURL]
 				}
 				mounts: scripts: {
