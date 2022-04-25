@@ -26,8 +26,8 @@ import (
     docker.#Run & {
 		entrypoint: ["/bin/sh"]
 		command: {
-		    name:   "/usr/bin/helm"
-			"args": ["lint", chart]
+		    name:   "-c"
+			"args": ["helm", "lint", chart]
 		}
 		mounts: "helm charts": {
 			contents: directory
