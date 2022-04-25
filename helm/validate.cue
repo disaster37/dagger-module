@@ -27,7 +27,7 @@ import (
 	schemas: [...string]
 
 	// The values contend
-    values: dagger.#Secret | *""
+    values: dagger.#Secret | dagger.#FS
 
 	// Environment variables
 	env: [string]: string | dagger.#Secret
@@ -44,7 +44,7 @@ import (
 		_showOnly: " --show-only \(showOnly)"
 	}
 	_values: string | *""
-	if values != "" {
+	if values != null {
         _write:    core.#WriteFile & {
 			input:      dagger.#Scratch
 			path:       "values.yaml"
