@@ -35,7 +35,9 @@ import (
 	// The docker image to use
 	input: docker.#Image | *_defaultImage.output
 
-	_defaultImage: #DefaultKubevalImage & {}
+	_defaultImage: #InstallTools & {
+       "env": env
+    }
 
 	_helm: "helm template \(chart)"
 	_mounts: [string]: core.#Mount
