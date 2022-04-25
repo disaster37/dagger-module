@@ -11,7 +11,7 @@ import (
 #InstallTools: {
 
     // The docker image to use
-    input: docker.#Image
+    input: docker.#Image | *_defaultImage.output
 
     // Environment variables
 	env: [string]: string | dagger.#Secret
@@ -26,10 +26,7 @@ import (
     _helmSchemaGenURL: "https://github.com/karuppiah7890/helm-schema-gen.git"
     _helmUnitTestURL: "https://github.com/vbehar/helm3-unittest"
 
-
-    if input == null {
-        input: #DefaultHelmImage & {}
-    }
+    _defaultImage: #DefaultHelmImage & {}
 
     _scripts: core.#Source & {
 		path: "_scripts"
