@@ -14,6 +14,7 @@ kubevalVersion: string | *"latest"
     source: "alpine/helm:\(helmVersion)"
 }
 
-#DefaultKubevalImage: docker.#Pull & {
-    source: "garethr/kubeval:\(kubevalVersion)"
+
+#DefaultHelmImageWithTools: #InstallTools & {
+    "env": env
 }

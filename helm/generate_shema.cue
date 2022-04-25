@@ -19,20 +19,33 @@ import (
 	env: [string]: string | dagger.#Secret
 
     // The docker image to use
-    input: docker.#Image | *_defaultImage.output
+    input: docker.#Image
 
-    _defaultImage: #InstallTools & {
+	_scripts: core.#Source & {
+		path: "_scripts"
+	}
+
+    if input == null {
+        input: #InstallTools & {
+            "env": env
+        }
     }
 
     docker.#Run & {
 		entrypoint: ["/bin/sh"]
 		command: {
 		    name:   "-c"
-			"args": ["scripts/generate_schema.sh"]
+			"args": ["/scripts/generate_schema.sh"]
 		}
-		mounts: "helm charts": {
-			contents: directory
-			dest:     "/src"
+		mounts: {
+			"helm charts": {
+				contents: directory
+				dest:     "/src"
+			}
+			scripts: {
+					dest:     "/scripts"
+					contents: _scripts.output
+			}
 		}
 		"env": {
 			env
