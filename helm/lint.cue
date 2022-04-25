@@ -19,9 +19,11 @@ import (
 	env: [string]: string | dagger.#Secret
 
     // The docker image to use
-    input: docker.#Image | *_defaultImage.output
+    input: docker.#Image
 
-    _defaultImage: #DefaultHelmImage & {}
+    if input == null {
+        input: #DefaultHelmImage & {}
+    }
 
     docker.#Run & {
 		entrypoint: ["/bin/sh"]

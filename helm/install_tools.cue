@@ -11,7 +11,7 @@ import (
 #InstallTools: {
 
     // The docker image to use
-    input: docker.#Image | *_defaultImage.output
+    input: docker.#Image
 
     // Environment variables
 	env: [string]: string | dagger.#Secret
@@ -24,8 +24,12 @@ import (
     }
 
     _helmSchemaGenURL: "https://github.com/karuppiah7890/helm-schema-gen.git"
+    _helmUnitTestURL: "https://github.com/vbehar/helm3-unittest"
 
-    _defaultImage: #DefaultHelmImage & {}
+
+    if input == null {
+        input: #DefaultHelmImage & {}
+    }
 
     _scripts: core.#Source & {
 		path: "_scripts"
@@ -67,12 +71,18 @@ import (
             docker.#Run & {
                 entrypoint: ["/bin/sh"]
 				command: {
-					name: "/scripts/install_schema_gen.sh"
-					args: [_helmSchemaGenURL]
+					name: "-c"
+					args: ["helm plugin install \(_helmSchemaGenURL)"]
 				}
-				mounts: scripts: {
-					dest:     "/scripts"
-					contents: _scripts.output
+                "env": {
+                    env
+                }
+			},
+            docker.#Run & {
+                entrypoint: ["/bin/sh"]
+				command: {
+					name: "-c"
+					args: ["helm plugin install \(_helmUnitTestURL)"]
 				}
                 "env": {
                     env

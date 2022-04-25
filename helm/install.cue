@@ -22,7 +22,7 @@ import (
 	env: [string]: string | dagger.#Secret
 
     // The docker image that contain helm and repositories to use
-    input: docker.#Image | *_defaultImage.output
+    input: docker.#Image
 
     // The chart source
     source: *"repository" | "local"
@@ -61,6 +61,10 @@ import (
     _args: ["--install", name]
     _mounts: [string]: core.#Mount
     _defaultImage: #DefaultHelmImage & {}
+
+    if input == null {
+        input: #DefaultHelmImage & {}
+    }
 
    if values != "" {
         _write:    core.#WriteFile & {

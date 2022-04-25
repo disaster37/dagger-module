@@ -14,12 +14,14 @@ import (
     }
 
     // The docker image to use
-    input: docker.#Image | *_defaultImage.output
+    input: docker.#Image
 
     // Environment variables
 	env: [string]: string | dagger.#Secret
 
-    _defaultImage: #DefaultHelmImage & {}
+    if input == null {
+        input: #DefaultHelmImage & {}
+    }
 
     docker.#Build & {
         steps: [

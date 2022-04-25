@@ -35,11 +35,14 @@ import (
 	// The docker image to use
 	input: docker.#Image | *_defaultImage.output
 
-	_defaultImage: #InstallTools & {
-    }
-
 	_helm: "helm template \(chart)"
 	_mounts: [string]: core.#Mount
+
+	if input == null {
+        input: #InstallTools & {
+            "env": env
+        }
+    }
 
 	_showOnly: string | *""
 	if showOnly != "" {
