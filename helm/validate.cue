@@ -33,7 +33,7 @@ import (
 	env: [string]: string | dagger.#Secret
 
 	// The docker image to use
-	input: docker.#Image | *_defaultImage.output
+	input: docker.#Image
 
 	_helm: "helm template \(chart)"
 	_mounts: [string]: core.#Mount
