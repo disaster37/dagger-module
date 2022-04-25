@@ -23,6 +23,8 @@ import (
         _kubeconformURL: "https://github.com/yannh/kubeconform/releases/download/\(kubevalVersion)/kubeconform-linux-amd64.tar.gz"
     }
 
+    _helmSchemaGenURL: "https://github.com/karuppiah7890/helm-schema-gen.git"
+
     _defaultImage: #DefaultHelmImage & {}
 
     _scripts: core.#Source & {
@@ -53,6 +55,20 @@ import (
 				command: {
 					name: "/scripts/install_kubeconform.sh"
 					args: [_kubeconformURL]
+				}
+				mounts: scripts: {
+					dest:     "/scripts"
+					contents: _scripts.output
+				}
+                "env": {
+                    env
+                }
+			},
+            docker.#Run & {
+                entrypoint: ["/bin/sh"]
+				command: {
+					name: "helm"
+					args: ["plugin", "install", _helmSchemaGenURL]
 				}
 				mounts: scripts: {
 					dest:     "/scripts"

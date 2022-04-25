@@ -56,7 +56,7 @@ import (
 	if version != "" {
 		_version: " --kubernetes-version \(version)"
 	}
-	_schema: [ for _, schema in schemas {" --schema-location \(schema)" }]
+	_schema: [ for _, schema in schemas {" --schema-location '\(schema)'" }]
 
     docker.#Run & {
 		entrypoint: ["/bin/sh"]
