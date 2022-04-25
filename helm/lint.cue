@@ -27,7 +27,7 @@ import (
 		entrypoint: ["/bin/sh"]
 		command: {
 		    name:   "-c"
-			"args": ["helm", "lint", chart]
+			"args": ["helm lint \(chart)"]
 		}
 		mounts: "helm charts": {
 			contents: directory
