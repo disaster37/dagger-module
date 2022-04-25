@@ -13,8 +13,3 @@ kubevalVersion: string | *"latest"
 #DefaultHelmImage: docker.#Pull & {
     source: "alpine/helm:\(helmVersion)"
 }
-
-
-#DefaultHelmImageWithTools: #InstallTools & {
-    "env": env
-}

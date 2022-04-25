@@ -3,6 +3,7 @@ package helm
 
 import (
 	"dagger.io/dagger"
+	"dagger.io/dagger/core"
 	"universe.dagger.io/docker"
 )
 
@@ -21,30 +22,22 @@ import (
     // The docker image to use
     input: docker.#Image
 
-	_scripts: core.#Source & {
-		path: "_scripts"
-	}
-
     if input == null {
         input: #InstallTools & {
             "env": env
         }
     }
 
-    docker.#Run & {
+    run: docker.#Run & {
 		entrypoint: ["/bin/sh"]
 		command: {
 		    name:   "-c"
-			"args": ["/scripts/generate_schema.sh"]
+			args: ["helm schema-gen values.yaml > /tmp/values.schema.json"]
 		}
 		mounts: {
 			"helm charts": {
 				contents: directory
 				dest:     "/src"
-			}
-			scripts: {
-					dest:     "/scripts"
-					contents: _scripts.output
 			}
 		}
 		"env": {
@@ -52,5 +45,7 @@ import (
 		}
         workdir: "/src"
         "input": input
+		export: files: "/tmp/values.schema.json": _
 	}
+	output: run.export.files."/tmp/values.schema.json"
 }
