@@ -27,30 +27,33 @@ import (
 	schemas: [...string]
 
 	// The values contend
-    values: dagger.#Secret | *""
+    values: dagger.#Secret
 
 	// Environment variables
 	env: [string]: string | dagger.#Secret
 
-    // The docker image to use
-    input: docker.#Image | *_defaultImage.output
+	// The docker image to use
+	input: docker.#Image | *_defaultImage.output
 
-    _defaultImage: #DefaultKubevalImage & {}
+	_defaultImage: #DefaultKubevalImage & {}
 
 	_helm: "helm template \(chart)"
+	_mounts: [string]: core.#Mount
 
 	_showOnly: string | *""
 	if showOnly != "" {
 		_showOnly: " --show-only \(showOnly)"
 	}
 	_values: string | *""
-	if values != "" {
-        _write:    core.#WriteFile & {
-			input:      dagger.#Scratch
-			path:       "values.yaml"
-			contents: values
-		}
-        _values: " -f \(_write.output)"
+	if values != null {
+        _values: " -f /tmp/values.yaml"
+      	_mounts: {
+        "values.yaml": {
+          dest:     "/tmp/values.yaml"
+          type:     "secret"
+          contents: values
+        }
+      }
     }
 	_version: string | *""
 	if version != "" {
@@ -64,9 +67,12 @@ import (
 		    name:   "-c"
 			"args": [_helm + _showOnly + _values + " | kubeconform --verbose --summary --ignore-missing-schemas" + _version + strings.Join(_schema, "")]
 		}
-		mounts: "helm charts": {
-			contents: directory
-			dest:     "/src"
+		mounts: {
+      		_mounts
+			"helm charts": {
+				contents: directory
+				dest:     "/src"
+			}
 		}
 		"env": {
 			env
