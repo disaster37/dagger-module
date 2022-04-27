@@ -21,12 +21,6 @@ import (
   // The docker image to use
   input: docker.#Image
 
-  if input == null {
-    input: #InstallTools & {
-      "env": env
-    }
-  }
-
   docker.#Run & {
     entrypoint: ["/bin/sh"]
     command: {

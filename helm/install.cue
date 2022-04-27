@@ -63,12 +63,6 @@ import (
   _mounts: [string]: core.#Mount
   _defaultImage: #DefaultHelmImage & {}
 
-  if input == null {
-    input: #InstallTools & {
-      "env": env
-    }
-  }
-
   if values != "" {
     _write:    core.#WriteFile & {
       input:      dagger.#Scratch

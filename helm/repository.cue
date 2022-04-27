@@ -21,12 +21,6 @@ import (
   // Environment variables
 	env: [string]: string | dagger.#Secret
 
-  if input == null {
-    input: #InstallTools & {
-      "env": env
-    }
-  }
-
   docker.#Build & {
     steps: [
       docker.#Step & {

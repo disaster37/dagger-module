@@ -41,7 +41,7 @@ import (
           entrypoint: ["/sbin/apk"]
           command: {
             name: "add"
-            args: ["curl"]
+            args: ["curl", "bash"]
             flags: {
               "-U":         true
             }

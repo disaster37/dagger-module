@@ -38,12 +38,6 @@ import (
 	_helm: "helm template \(chart)"
 	_mounts: [string]: core.#Mount
 
-	if input == null {
-    input: #InstallTools & {
-      "env": env
-    }
-  }
-
 	_showOnly: string | *""
 	if showOnly != "" {
 		_showOnly: " --show-only \(showOnly)"
