@@ -11,11 +11,11 @@ import (
 // Permit to validate helm chart with kubeval
 #Validate: {
 
-    // The source directory that contain helm charts
-    directory: dagger.#FS
+  // The source directory that contain helm charts
+  directory: dagger.#FS
 
-    // The relative path from `directory` where to run helm generate
-    chart: string | *"."
+  // The relative path from `directory` where to run helm generate
+  chart: string | *"."
 
 	// The file to validate on template
 	showOnly: string | *""
@@ -27,7 +27,7 @@ import (
 	schemas: [...string]
 
 	// The values contend
-    values: dagger.#Secret
+  values: dagger.#Secret
 
 	// Environment variables
 	env: [string]: string | dagger.#Secret
@@ -39,10 +39,10 @@ import (
 	_mounts: [string]: core.#Mount
 
 	if input == null {
-        input: #InstallTools & {
-            "env": env
-        }
+    input: #InstallTools & {
+      "env": env
     }
+  }
 
 	_showOnly: string | *""
 	if showOnly != "" {
@@ -50,38 +50,38 @@ import (
 	}
 	_values: string | *""
 	if values != null {
-        _values: " -f /tmp/values.yaml"
-      	_mounts: {
-        "values.yaml": {
-          dest:     "/tmp/values.yaml"
-          type:     "secret"
-          contents: values
-        }
+    _values: " -f /tmp/values.yaml"
+    _mounts: {
+      "values.yaml": {
+        dest:     "/tmp/values.yaml"
+        type:     "secret"
+        contents: values
       }
     }
+  }
 	_version: string | *""
 	if version != "" {
 		_version: " --kubernetes-version \(version)"
 	}
 	_schema: [ for _, schema in schemas {" --schema-location '\(schema)'" }]
 
-    docker.#Run & {
-		entrypoint: ["/bin/sh"]
-		command: {
-		    name:   "-c"
-			"args": [_helm + _showOnly + _values + " | kubeconform --verbose --summary --ignore-missing-schemas" + _version + strings.Join(_schema, "")]
-		}
-		mounts: {
-      		_mounts
-			"helm charts": {
-				contents: directory
-				dest:     "/src"
-			}
-		}
-		"env": {
-			env
-		}
-        workdir: "/src"
-        "input": input
-	}
+  docker.#Run & {
+    entrypoint: ["/bin/sh"]
+    command: {
+      name:   "-c"
+      "args": [_helm + _showOnly + _values + " | kubeconform --verbose --summary --ignore-missing-schemas" + _version + strings.Join(_schema, "")]
+    }
+    mounts: {
+      mounts
+      "helm charts": {
+        contents: directory
+        dest:     "/src"
+      }
+    }
+    "env": {
+      env
+    }
+    workdir: "/src"
+    "input": input
+  }
 }

@@ -6,45 +6,47 @@ import (
 	"universe.dagger.io/docker"
 )
 
-// Permit to run helm lint
+// Permit to generate the schema values.yaml.json
+// Becarrefull, it overwrite all the file
 #GenerateSchema: {
 
-    // The source directory that contain helm charts
-    directory: dagger.#FS
+  // The source directory that contain helm charts
+  directory: dagger.#FS
 
-    // The relative path from `directory` where to lint 
-    chart: string | *"."
+  // The relative path from `directory` where to lint 
+  chart: string | *"."
 
 	// Environment variables
 	env: [string]: string | dagger.#Secret
 
-    // The docker image to use
-    input: docker.#Image
+  // The docker image to use
+  input: docker.#Image
 
-    if input == null {
-        input: #InstallTools & {
-            "env": env
-        }
+  if input == null {
+      input: #InstallTools & {
+          "env": env
+      }
+  }
+
+  run: docker.#Run & {
+    entrypoint: ["/bin/sh"]
+    command: {
+      name:   "-c"
+      args: ["helm schema-gen values.yaml > /tmp/values.schema.json"]
     }
+    mounts: {
+      "helm charts": {
+        contents: directory
+        dest:     "/src"
+      }
+    }
+    "env": {
+      env
+    }
+    workdir: "/src"
+    "input": input
+    export: files: "/tmp/values.schema.json": _
+  }
 
-    run: docker.#Run & {
-		entrypoint: ["/bin/sh"]
-		command: {
-		    name:   "-c"
-			args: ["helm schema-gen values.yaml > /tmp/values.schema.json"]
-		}
-		mounts: {
-			"helm charts": {
-				contents: directory
-				dest:     "/src"
-			}
-		}
-		"env": {
-			env
-		}
-        workdir: "/src"
-        "input": input
-		export: files: "/tmp/values.schema.json": _
-	}
 	output: run.export.files."/tmp/values.schema.json"
 }

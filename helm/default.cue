@@ -1,7 +1,7 @@
 package helm
 
 import (
-	"universe.dagger.io/docker"
+  "universe.dagger.io/docker"
 )
 
 // The helm version to use when use default image
@@ -11,5 +11,5 @@ helmVersion: string | *"latest"
 kubevalVersion: string | *"latest"
 
 #DefaultHelmImage: docker.#Pull & {
-    source: "alpine/helm:\(helmVersion)"
+  source: "alpine/helm:\(helmVersion)"
 }
