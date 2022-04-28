@@ -3,6 +3,7 @@ package helm
 
 import (
 	"dagger.io/dagger"
+  "dagger.io/dagger/core"
 	"universe.dagger.io/docker"
 )
 
@@ -28,7 +29,7 @@ import (
     }
   }
 
-  run: docker.#Build & {
+  _run: docker.#Build & {
 		steps: [
       #input,
       docker.#Run & {
@@ -47,10 +48,15 @@ import (
           env
         }
         workdir: "/src"
-        export: files: "/tmp/values.schema.json": _
       }
     ]
   }
 
-	output: run.export.files."/tmp/values.schema.json"
+  _output: core.#ReadFile & {
+    input: _run.output.rootfs
+    path: "/tmp/values.schema.json"
+  }
+    
+
+	output: _output.contents
 }
