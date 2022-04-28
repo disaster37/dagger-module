@@ -6,9 +6,8 @@ import (
 	"universe.dagger.io/docker"
 )
 
-// Permit to generate the schema values.yaml.json
-// Becarrefull, it overwrite all the file
-#GenerateSchema: {
+// Permit to run helm lint
+#UnitTest: {
 
   // The source directory that contain helm charts
   directory: dagger.#FS
@@ -27,30 +26,27 @@ import (
       "env": env
     }
   }
-
-  run: docker.#Build & {
+  
+  docker.#Build & {
 		steps: [
       #input,
       docker.#Run & {
         entrypoint: ["/bin/sh"]
         command: {
           name:   "-c"
-          args: ["helm schema-gen values.yaml > /tmp/values.schema.json"]
+          "args": ["helm unittest \(chart)"]
         }
-        mounts: {
-          "helm charts": {
-            contents: directory
-            dest:     "/src"
-          }
+        mounts: "helm charts": {
+          contents: directory
+          dest:     "/src"
         }
         "env": {
           env
         }
         workdir: "/src"
-        export: files: "/tmp/values.schema.json": _
       }
     ]
   }
 
-	output: run.export.files."/tmp/values.schema.json"
+  
 }

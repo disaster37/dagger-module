@@ -21,20 +21,32 @@ import (
   // The docker image to use
   input: docker.#Image
 
-  docker.#Run & {
-    entrypoint: ["/bin/sh"]
-    command: {
-      name:   "-c"
-      "args": ["helm lint \(chart)"]
+  #input: input | *{
+    #InstallTools & {
+      "env": env
     }
-    mounts: "helm charts": {
-      contents: directory
-      dest:     "/src"
-    }
-    "env": {
-      env
-    }
-    workdir: "/src"
-    "input": input
   }
+  
+  docker.#Build & {
+		steps: [
+      #input,
+      docker.#Run & {
+        entrypoint: ["/bin/sh"]
+        command: {
+          name:   "-c"
+          "args": ["helm lint \(chart)"]
+        }
+        mounts: "helm charts": {
+          contents: directory
+          dest:     "/src"
+        }
+        "env": {
+          env
+        }
+        workdir: "/src"
+      }
+    ]
+  }
+
+  
 }

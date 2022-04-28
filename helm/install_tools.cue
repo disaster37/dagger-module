@@ -11,7 +11,9 @@ import (
 #InstallTools: {
 
   // The docker image to use
-  input: docker.#Image | *_defaultImage.output
+  input: docker.#Image | *{
+    #DefaultHelmImage
+  }
 
   // Environment variables
 	env: [string]: string | dagger.#Secret
@@ -26,17 +28,18 @@ import (
   _helmSchemaGenURL: "https://github.com/karuppiah7890/helm-schema-gen.git"
   _helmUnitTestURL: "https://github.com/vbehar/helm3-unittest"
 
-  _defaultImage: #DefaultHelmImage & {}
 
   _scripts: core.#Source & {
 		path: "_scripts"
 	}
 
+  #input: input | *{
+    #DefaultHelmImage
+  }
+
   docker.#Build & {
     steps: [
-      docker.#Step & {
-          output: input
-      },
+      #input,
       docker.#Run & {
           entrypoint: ["/sbin/apk"]
           command: {

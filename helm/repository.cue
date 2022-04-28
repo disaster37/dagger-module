@@ -21,11 +21,15 @@ import (
   // Environment variables
 	env: [string]: string | dagger.#Secret
 
+  #input: input | *{
+    #InstallTools & {
+      "env": env
+    }
+  }
+
   docker.#Build & {
     steps: [
-      docker.#Step & {
-          output: input
-      },
+      #input,
       for repoName, repo in repositories {
         docker.#Run & {
           command: {

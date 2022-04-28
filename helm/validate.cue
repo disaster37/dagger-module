@@ -35,6 +35,12 @@ import (
 	// The docker image to use
 	input: docker.#Image
 
+  #input: input | *{
+    #InstallTools & {
+      "env": env
+    }
+  }
+
 	_helm: "helm template \(chart)"
 	_mounts: [string]: core.#Mount
 
@@ -59,23 +65,27 @@ import (
 	}
 	_schema: [ for _, schema in schemas {" --schema-location '\(schema)'" }]
 
-  docker.#Run & {
-    entrypoint: ["/bin/sh"]
-    command: {
-      name:   "-c"
-      "args": [_helm + _showOnly + _values + " | kubeconform --verbose --summary --ignore-missing-schemas" + _version + strings.Join(_schema, "")]
-    }
-    mounts: {
-      mounts
-      "helm charts": {
-        contents: directory
-        dest:     "/src"
+  docker.#Build & {
+		steps: [
+      #input,
+      docker.#Run & {
+        entrypoint: ["/bin/sh"]
+        command: {
+          name:   "-c"
+          "args": [_helm + _showOnly + _values + " | kubeconform --verbose --summary --ignore-missing-schemas" + _version + strings.Join(_schema, "")]
+        }
+        mounts: {
+          mounts
+          "helm charts": {
+            contents: directory
+            dest:     "/src"
+          }
+        }
+        "env": {
+          env
+        }
+        workdir: "/src"
       }
-    }
-    "env": {
-      env
-    }
-    workdir: "/src"
-    "input": input
+    ]
   }
 }

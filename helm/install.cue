@@ -59,6 +59,12 @@ import (
     _args: _args + ["."]
   }
 
+  #input: input | *{
+    #InstallTools & {
+      "env": env
+    }
+  }
+
   _args: ["--install", name]
   _mounts: [string]: core.#Mount
   _defaultImage: #DefaultHelmImage & {}
@@ -72,24 +78,29 @@ import (
 
     _args: _args + ["-f", _write.output]
   }
-    
-  docker.#Run & {
-		command: {
-      name:   "update"
-			"args": _args
-		}
-    mounts: _mounts + { 
-      "kubeconfig": {
-        dest:     "/kubeconfig"
-        type:     "secret"
-        contents: kubeconfig
-      }
-    }
-    "env": {
-      env
-      KUBECONFIG: "/kubeconfig"
-    }
-    workdir: "/src"
-    "input": input
-	}
+  
+
+  docker.#Build & {
+		steps: [
+      #input,
+      docker.#Run & {
+        command: {
+          name:   "update"
+          "args": _args
+        }
+        mounts: _mounts + { 
+          "kubeconfig": {
+            dest:     "/kubeconfig"
+            type:     "secret"
+            contents: kubeconfig
+          }
+        }
+        "env": {
+          env
+          KUBECONFIG: "/kubeconfig"
+        }
+        workdir: "/src"
+      },
+    ]
+  }
 }
