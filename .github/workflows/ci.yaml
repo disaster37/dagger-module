@@ -1,0 +1,31 @@
+name: ci
+
+on:
+  push:
+    # Trigger this workflow only on commits pushed to the main branch
+    branches:
+      - main
+
+jobs:
+  dagger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v2
+
+      # You need to run `dagger project init` locally before and commit the cue.mod directory to the repository with its contents
+      - name: Push Openshift default image
+        uses: dagger/dagger-for-github@v2
+        # See all options at https://github.com/dagger/dagger-for-github
+        with:
+          version: 0.2
+          workdir: ./openshift/test
+          # To pin external dependencies, you can use `project update github.com/[package-source]@v[n]`
+          cmds: |
+            project init
+            project update
+            project update https://github.com/disaster37/dagger-module@HEAD
+            do push
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}

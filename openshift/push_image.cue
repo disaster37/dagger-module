@@ -3,6 +3,7 @@ package openshift
 import (
   "dagger.io/dagger"
   "dagger.io/dagger/core"
+  "universe.dagger.io/docker"
 )
 
 // Permit to build helm image with all tools required
@@ -12,7 +13,7 @@ import (
 	env: [string]: string | dagger.#Secret
 
   // The docker image to use
-  input?: docker.#Image
+  image?: docker.#Image
 
   // The docker registry where to push image
   destination: core.#Ref
@@ -23,24 +24,29 @@ import (
 	}
 
 
+  if image == _|_ {
+    _default: #InstallTools & {
+      "env": env
+    }
 
-  core.#Push & {
-		"dest": destination
-    "env": {
-      env
-    }
-		if auth != _|_ {
-			"auth": auth
-		}
-    if input != _|_ {
-      "input": input.rootfs
-		  config:  input.config
-    }
-    if input == _|_ {
-      _default: #InstallTools & {
-        "env": env
+    _push: core.#Push & {
+		  "dest": destination
+      if auth != _|_ {
+        "auth": auth
       }
-      "input": _default.output.rootfs
-		  config:  _default.output.config
+      input: _default.output.rootfs
+      config:  _default.output.config
     }
-	}
+  }
+
+  if image != _|_ {
+    _push: core.#Push & {
+      "dest": destination
+      if auth != _|_ {
+        "auth": auth
+      }
+      input: image.rootfs
+      config:  image.config
+    }
+  }
+}

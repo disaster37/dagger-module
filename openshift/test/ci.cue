@@ -8,11 +8,13 @@ import (
 
 dagger.#Plan & {
   client: {
-
     env: {
-      http_proxy?: dagger.#Secret
-      https_proxy?: dagger.#Secret
-      no_proxy?: string
+      http_proxy: dagger.#Secret | *null
+      https_proxy: dagger.#Secret | *null
+      no_proxy: string | *null
+      TARGET_IMAGE: string | *"webcenter/dagger-plugin:openshift"
+      DOCKER_USERNAME: string
+      DOCKER_PASSWORD: dagger.#Secret
     }
 
     commands: {
@@ -27,27 +29,27 @@ dagger.#Plan & {
 
   actions: {
 
-    // Run helm lint
+    // Push docker image on registry
     push: #push
 
     _env: {
-      if client.env.http_proxy != _|_ {
+      if client.env.http_proxy != null {
         http_proxy: client.env.http_proxy
       }
-      if client.env.https_proxy != _|_ {
+      if client.env.https_proxy != null {
         https_proxy: client.env.https_proxy
       }
-      if client.env.no_proxy != _|_ {
+      if client.env.no_proxy != null {
         no_proxy: client.env.no_proxy
       }
     }
 
-    #push:  openshift.#PushDockerImage {
+    #push: openshift.#PushDockerImage & {
 	    env: _env
-      destination: core.#Ref
+      destination: client.env.TARGET_IMAGE
       auth: {
-        username: string
-        secret:   dagger.#Secret
+        username: client.env.DOCKER_USERNAME
+        secret:   client.env.DOCKER_PASSWORD
       }
     }
   }

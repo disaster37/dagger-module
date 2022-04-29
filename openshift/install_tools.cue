@@ -11,7 +11,7 @@ import (
 
   // The docker image to use
   input: docker.#Image | *{
-    #DefaultHelmImage
+    #DefaultImage
   }
 
   // Environment variables
@@ -30,7 +30,7 @@ import (
 	}
 
   #input: input | *{
-    #DefaultHelmImage
+    #DefaultImage
   }
 
   docker.#Build & {
