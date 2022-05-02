@@ -37,13 +37,10 @@ import (
     steps: [
       #input,
       docker.#Run & {
-          entrypoint: ["/sbin/apk"]
+          entrypoint: ["/bin/sh"]
           command: {
-            name: "add"
-            args: ["curl", "bash"]
-            flags: {
-              "-U":         true
-            }
+            name: "-c"
+            args: ["microdnf install -y curl bash"]
           }
           "env": {
               env
