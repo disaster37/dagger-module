@@ -27,7 +27,7 @@ import (
 	schemas: [...string]
 
 	// The values contend
-  values: dagger.#Secret
+  values?: dagger.#Secret
 
 	// Environment variables
 	env: [string]: string | dagger.#Secret
@@ -56,7 +56,7 @@ import (
 		_showOnly: " --show-only \(showOnly)"
 	}
 	_values: string | *""
-	if values != null {
+	if values != _|_ {
     _values: " -f /tmp/values.yaml"
     _mounts: {
       "values.yaml": {
@@ -82,7 +82,7 @@ import (
           "args": [_helm + _showOnly + _values + " | kubeconform --verbose --summary --ignore-missing-schemas" + _version + strings.Join(_schema, "")]
         }
         mounts: {
-          mounts
+          _mounts
           "helm charts": {
             contents: directory
             dest:     "/src"
