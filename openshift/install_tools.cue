@@ -40,7 +40,7 @@ import (
           entrypoint: ["/bin/sh"]
           command: {
             name: "-c"
-            args: ["microdnf install -y curl bash"]
+            args: ["microdnf install -y curl bash gunzip tar"]
           }
           "env": {
               env
