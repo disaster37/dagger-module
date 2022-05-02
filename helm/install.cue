@@ -16,19 +16,20 @@ import (
   // the release name
   name: string
 
+  // The namespace where install chart
+  namespace: string | *"default"
+
   // The values contend
-  values: dagger.#Secret | *""
+  values: dagger.#Secret
 
   // Environment variables
 	env: [string]: string | dagger.#Secret
 
   // The docker image that contain helm and repositories to use
-  input: docker.#Image
+  input?: docker.#Image
 
   // The chart source
-  source: *"repository" | "local"
-  {
-    source: "repository"
+  source: {
 
     // The chart name
     chart: string
@@ -39,44 +40,51 @@ import (
     // The chart version
     version: string | *""
 
-    _args: _args + ["\(repository)/\(chart)"]
+    _cmd: "helm upgrade --install -n \(namespace) \(name) \(repository)/\(chart)"
 
     if version != "" {
-      _args: _args + ["--version", version]
+      "_cmd": _cmd + " --version \(version)"
     }
+
+    _mountsSource: [string]: core.#Mount
   } | {
-    source: "local"
     
     // The source directory that contain helm and or values.yaml
     directory: dagger.#FS
 
-    _mounts: {
+    _mountsSource: {
       "helm charts": {
         contents: directory
         dest:     "/src"
       }
     }
-    _args: _args + ["."]
+    _cmd: "helm upgrade --install -n \(namespace) \(name) ."
   }
 
-  #input: input | *{
-    #InstallTools & {
-      "env": env
+  #input: {
+    if input != _|_ {
+      docker.#Step & {
+        output: input
+      }
+    },
+    if input == _|_ {
+      #InstallTools & {
+        "env": env
+      }
     }
   }
-
-  _args: ["--install", name]
-  _mounts: [string]: core.#Mount
-  _defaultImage: #DefaultHelmImage & {}
-
-  if values != "" {
-    _write:    core.#WriteFile & {
-      input:      dagger.#Scratch
-      path:       "values.yaml"
-      contents: values
+  
+  _mountsValues: [string]: core.#Mount
+  _cmdValues: string | *""
+	if values != null {
+    _cmdValues: " -f /tmp/values.yaml"
+    _mountsValues: {
+      "values.yaml": {
+        dest:     "/tmp/values.yaml"
+        type:     "secret"
+        contents: values
+      }
     }
-
-    _args: _args + ["-f", _write.output]
   }
   
 
@@ -84,12 +92,15 @@ import (
 		steps: [
       #input,
       docker.#Run & {
+        entrypoint: ["/bin/sh"]
         command: {
-          name:   "update"
-          "args": _args
+          name:   "-c"
+          "args": [source._cmd + _cmdValues]
         }
-        mounts: _mounts + { 
-          "kubeconfig": {
+        mounts: {
+          _mountsValues
+          source._mountsSource
+          "/root/.kube/config": {
             dest:     "/kubeconfig"
             type:     "secret"
             contents: kubeconfig
@@ -100,7 +111,7 @@ import (
           KUBECONFIG: "/kubeconfig"
         }
         workdir: "/src"
-      },
+      }
     ]
   }
 }

@@ -16,14 +16,21 @@ import (
   }
 
   // The docker image to use
-  input: docker.#Image
+  input?: docker.#Image
 
   // Environment variables
 	env: [string]: string | dagger.#Secret
 
-  #input: input | *{
-    #InstallTools & {
-      "env": env
+  #input: {
+    if input != _|_ {
+      docker.#Step & {
+        output: input
+      }
+    },
+    if input == _|_ {
+      #InstallTools & {
+        "env": env
+      }
     }
   }
 

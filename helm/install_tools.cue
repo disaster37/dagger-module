@@ -27,6 +27,9 @@ import (
 
   _helmSchemaGenURL: "https://github.com/karuppiah7890/helm-schema-gen.git"
   _helmUnitTestURL: "https://github.com/vbehar/helm3-unittest"
+  _helmPushChartmuseumURL: "https://github.com/chartmuseum/helm-push"
+  _helmPushArtifactoryURL: "https://github.com/belitre/helm-push-artifactory-plugin"
+  _helmPushArtifactoryVersion: "1.0.2"
 
 
   _scripts: core.#Source & {
@@ -82,6 +85,26 @@ import (
         command: {
           name: "-c"
           args: ["helm plugin install \(_helmUnitTestURL)"]
+        }
+        "env": {
+            env
+        }
+      },
+      docker.#Run & {
+        entrypoint: ["/bin/sh"]
+        command: {
+          name: "-c"
+          args: ["helm plugin install \(_helmPushChartmuseumURL)"]
+        }
+        "env": {
+            env
+        }
+      },
+      docker.#Run & {
+        entrypoint: ["/bin/sh"]
+        command: {
+          name: "-c"
+          args: ["helm plugin install \(_helmPushArtifactoryURL) --version \(_helmPushArtifactoryVersion)"]
         }
         "env": {
             env
