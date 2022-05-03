@@ -56,7 +56,7 @@ dagger.#Plan & {
       env: _env
       directory: client.filesystem."./".read.contents
       chart: "test"
-      version: "1.22.8"
+      "version": "1.22.8"
       values: client.filesystem."./test/values.yaml".read.contents
     }
 
@@ -64,7 +64,7 @@ dagger.#Plan & {
       env: _env
       directory: client.filesystem."./".read.contents
       chart: "test"
-      version: "k8s=v1.22.8"
+      "version": "k8s=v1.22.8"
       values: client.filesystem."./test/values.yaml".read.contents
     }
 
