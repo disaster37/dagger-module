@@ -36,31 +36,31 @@ dagger.#Plan & {
     }
 
 
-    helm.#InstallTools & {
+    installTools: helm.#InstallTools & {
       env: _env
     }
 
-    helm.#GenerateSchema & {
+    generateSchema: helm.#GenerateSchema & {
       env: _env
       directory: client.filesystem."./".read.contents
       chart: "test"
     }
 
-    helm.#Lint & {
+    lint: helm.#Lint & {
       env: _env
       directory: client.filesystem."./".read.contents
       chart: "test"
     }
 
-    helm.#Validate & {
+    validate: helm.#Validate & {
       env: _env
       directory: client.filesystem."./".read.contents
       chart: "test"
-      "version": "1.22.8"
+      version: "1.22.8"
       values: client.filesystem."./test/values.yaml".read.contents
     }
 
-    helm.#Deprecated & {
+    deprecated: helm.#Deprecated & {
       env: _env
       directory: client.filesystem."./".read.contents
       chart: "test"
@@ -68,13 +68,13 @@ dagger.#Plan & {
       values: client.filesystem."./test/values.yaml".read.contents
     }
 
-    helm.#UnitTest & {
+    unit: helm.#UnitTest & {
       env: _env
       directory: client.filesystem."./".read.contents
       chart: "test"
     }
 
-    //#install: helm.#Install & {
+    //install: helm.#Install & {
     //  env: _env
     //  name: "jarvis-api"
     //  values: client.filesystem."./examples/jarvis-api/values.yaml".read.contents
@@ -84,7 +84,7 @@ dagger.#Plan & {
     //  kubeconfig: client.commands.kubeconfig.stdout
     //}
 
-    //#push: helm.#PushToChartmuseum & {
+    //push: helm.#PushToChartmuseum & {
     // directory: client.filesystem."./".read.contents
     //  env: _env
     //  input: _repos.output
