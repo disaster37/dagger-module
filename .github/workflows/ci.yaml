@@ -7,7 +7,7 @@ on:
       - main
 
 jobs:
-  Test plugins:
+  Test_plugins:
     runs-on: ubuntu-latest
     steps:
       - name: Clone repository
@@ -29,7 +29,7 @@ jobs:
           https_proxy: ""
           no_proxy: ""
       
-  Push docker images:
+  Push_docker_images:
     runs-on: ubuntu-latest
     steps:
       - name: Clone repository
