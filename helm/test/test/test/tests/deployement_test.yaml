@@ -1,0 +1,10 @@
+suite: test route
+templates:
+  - deployement.yaml
+tests:
+  - it: should pass all kinds of assertion
+    asserts:
+      - isKind:
+          of: Deployment
+      - isAPIVersion:
+          of: apps/v1
