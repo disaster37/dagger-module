@@ -30,6 +30,7 @@ jobs:
           no_proxy: ""
       
   Push_docker_images:
+    needs: [Test_plugins]
     runs-on: ubuntu-latest
     steps:
       - name: Clone repository
