@@ -21,7 +21,7 @@ dagger.#Plan & {
       
 
   actions: test: {
-    _k8sVersion: "1.22.8"
+    //_k8sVersion: "1.22.8"
 
     _env: {
       if client.env.http_proxy != null {
@@ -56,7 +56,7 @@ dagger.#Plan & {
       env: _env
       directory: client.filesystem."./".read.contents
       chart: "test"
-      version: _k8sVersion
+      version: "1.22.8"
       values: client.filesystem."./test/values.yaml".read.contents
     }
 
@@ -64,7 +64,7 @@ dagger.#Plan & {
       env: _env
       directory: client.filesystem."./".read.contents
       chart: "test"
-      version: "k8s=v\(_k8sVersion)"
+      version: "k8s=v1.22.8"
       values: client.filesystem."./test/values.yaml".read.contents
     }
 
