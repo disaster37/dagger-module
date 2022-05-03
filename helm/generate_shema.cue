@@ -43,7 +43,7 @@ import (
         entrypoint: ["/bin/sh"]
         command: {
           name:   "-c"
-          args: ["helm schema-gen values.yaml > /tmp/values.schema.json"]
+          args: ["helm schema-gen \(chart)/values.yaml > /tmp/values.schema.json"]
         }
         mounts: {
           "helm charts": {
