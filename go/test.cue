@@ -2,6 +2,7 @@ package go
 
 import(
   "dagger.io/dagger"
+  "universe.dagger.io/docker"
 )
 
 // Test a go package
