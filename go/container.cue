@@ -18,6 +18,8 @@ import (
 	// Environment variables
 	env: [string]: string | dagger.#Secret
 
+	input: docker.#Image
+
 	// Use go image
 	_image: #Image
 
@@ -26,7 +28,7 @@ import (
 	_buildCachePath: "/root/.cache/go-build"
 
 	docker.#Run & {
-		input:   *_image.output | docker.#Image
+		"input":   *_image.output | input
 		workdir: _sourcePath
 		mounts: {
 			"source": {
