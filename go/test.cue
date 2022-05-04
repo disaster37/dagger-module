@@ -12,6 +12,8 @@ import(
   // Environment variables
 	env: [string]: string | dagger.#Secret
 
+  input?: docker.#Image
+
 	#Container & {
 		command: {
 			name: "go"
@@ -22,5 +24,9 @@ import(
 			}
 		}
     "env": env
+
+    if input != _|_ {
+      "input": input
+    }
 	}
 }
