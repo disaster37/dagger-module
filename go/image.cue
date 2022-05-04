@@ -39,10 +39,10 @@ _#DefaultVersion: "1.18"
 							"-U":         true
 							"--no-cache": true
 						}
-            "env": {
-              env
-            }
 					}
+          "env": {
+            env
+          }
 				}
 			},
 		]
