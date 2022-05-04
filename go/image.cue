@@ -19,7 +19,8 @@ _#DefaultVersion: "1.18"
 		"alpine-sdk": _
 	}
 
-  env: map[string] *string | dagger.#Secret
+  // Environment variables
+	env: [string]: string | dagger.#Secret
 
 	// FIXME Basically a copy of alpine.#Build with a different image
 	// Should we create a special definition?
