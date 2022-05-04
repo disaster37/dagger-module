@@ -1,5 +1,9 @@
 package go
 
+import(
+  "dagger.io/dagger"
+)
+
 // Test a go package
 #Test: {
 	// Package to test
