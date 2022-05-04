@@ -18,17 +18,24 @@ import (
 	// Environment variables
 	env: [string]: string | dagger.#Secret
 
-	input: docker.#Image
+  // The docker image
+  input?: docker.#Image
 
-	// Use go image
-	_image: #Image
+	
 
 	_sourcePath:     "/src"
 	_modCachePath:   "/root/.cache/go-mod"
 	_buildCachePath: "/root/.cache/go-build"
 
 	docker.#Run & {
-		"input":   *_image.output | input
+		if input != _|_ {
+      "input": input
+    },
+    if input == _|_ {
+      // Default golang image
+	    _image: #Image
+      input: _image.output
+    }
 		workdir: _sourcePath
 		mounts: {
 			"source": {

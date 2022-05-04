@@ -8,14 +8,16 @@ import(
 // Test a go package
 #Test: {
 	// Package to test
-	package: *"." | string
+	package: *"./..." | string
 
   // Environment variables
 	env: [string]: string | dagger.#Secret
 
+   // The docker image
   input?: docker.#Image
 
 	#Container & {
+    "input": input
 		command: {
 			name: "go"
 			args: [package]
@@ -25,9 +27,5 @@ import(
 			}
 		}
     "env": env
-
-    if input != _|_ {
-      "input": input
-    }
 	}
 }
