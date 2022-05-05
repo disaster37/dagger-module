@@ -7,6 +7,9 @@ import(
 
 // Test a go package
 #Test: {
+	// Source code
+	source: dagger.#FS
+
 	// Package to test
 	package: *"./..." | string
 
@@ -20,6 +23,7 @@ import(
 
 	container: #Container & {
     "input": input
+		"source": source
 		command: {
 			name: "go"
 			"args": [package, "-race -coverprofile=coverage.txt -covermode=atomic"] + args
