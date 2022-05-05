@@ -7,7 +7,7 @@ import (
 )
 
 _baseImage: "redhat/ubi8-minimal"
-_basePackage: [
+_basePackages: [
   "bash",
   "shadow-utils"
 ]
