@@ -10,6 +10,8 @@ import(
 	// Package to test
 	package: *"./..." | string
 
+	args: [...string]
+
   // Environment variables
 	env: [string]: string | dagger.#Secret
 
@@ -20,7 +22,7 @@ import(
     "input": input
 		command: {
 			name: "go"
-			args: [package]
+			"args": [package] + args
 			flags: {
 				test: true
 				"-v": true
