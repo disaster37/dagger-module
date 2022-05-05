@@ -22,12 +22,16 @@ import(
     "input": input
 		command: {
 			name: "go"
-			"args": [package] + args
+			"args": [package, "-race -coverprofile=coverage.txt -covermode=atomic"] + args
 			flags: {
 				test: true
 				"-v": true
 			}
 		}
     "env": env
+		export: files: "coverage.txt": _
 	}
+
+	// file that contain the code coverage
+	output: container.export.files."coverage.txt"
 }
