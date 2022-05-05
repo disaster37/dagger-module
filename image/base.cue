@@ -7,6 +7,10 @@ import (
 )
 
 _baseImage: "redhat/ubi8-minimal"
+_basePackage: [
+  "bash",
+  "shadow-utils"
+]
 
 // Permit to get base image with user and some extra tools
 #Base: {
@@ -31,6 +35,15 @@ _baseImage: "redhat/ubi8-minimal"
       docker.#Pull & {
         source: "\(_baseImage):\(version)"
       },
+      docker.#Run & {
+        command: {
+          name: "/bin/sh"
+          args: ["-c", "microdnf install -y " + strings.Join(_basePackages, " ")]
+        }
+        "env": {
+            env
+        }
+      },
       if user != _|_ {
         docker.#Run & {
           command: {
@@ -46,13 +59,22 @@ _baseImage: "redhat/ubi8-minimal"
         docker.#Run & {
           command: {
             name: "/bin/sh"
-            args: ["-c", "microdnf install -y " + strings.Join(packages, " ") + " && microdnf clean all && rm -rf /tmp/* /var/tmp/*"]
+            args: ["-c", "microdnf install -y " + strings.Join(packages, " ")]
           }
           "env": {
               env
           }
         },
       }
+      docker.#Run & {
+        command: {
+          name: "/bin/sh"
+          args: ["-c", "microdnf clean all && rm -rf /tmp/* /var/tmp/*")]
+        }
+        "env": {
+            env
+        }
+      },
     ]
   }
 }
