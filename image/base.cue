@@ -3,7 +3,6 @@ package image
 import (
   "strings"
   "dagger.io/dagger"
-  "dagger.io/dagger/core"
 	"universe.dagger.io/docker"
 )
 
