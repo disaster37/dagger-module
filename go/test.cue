@@ -18,7 +18,7 @@ import(
    // The docker image
   input?: docker.#Image
 
-	#Container & {
+	container: #Container & {
     "input": input
 		command: {
 			name: "go"
