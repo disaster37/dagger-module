@@ -35,7 +35,7 @@ _baseImage: "redhat/ubi8-minimal"
         docker.#Run & {
           command: {
             name: "-c"
-            args: ["groupadd --gid \(gid) \(group) && useradd -d \(home) -m -g \(group) -s /bin/bash -u \(uid) \(user)"]
+            args: ["groupadd --gid \(user.gid) \(user.group) && useradd -d \(user.home) -m -g \(user.group) -s /bin/bash -u \(user.uid) \(user.user)"]
           }
           "env": {
               env
