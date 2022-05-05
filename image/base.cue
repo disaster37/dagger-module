@@ -34,8 +34,8 @@ _baseImage: "redhat/ubi8-minimal"
       if user != _|_ {
         docker.#Run & {
           command: {
-            name: "-c"
-            args: ["groupadd --gid \(user.gid) \(user.group) && useradd -d \(user.home) -m -g \(user.group) -s /bin/bash -u \(user.uid) \(user.user)"]
+            name: "/bin/sh"
+            args: ["-c", "groupadd --gid \(user.gid) \(user.group) && useradd -d \(user.home) -m -g \(user.group) -s /bin/bash -u \(user.uid) \(user.user)"]
           }
           "env": {
               env
@@ -45,8 +45,8 @@ _baseImage: "redhat/ubi8-minimal"
       if packages != _|_ {
         docker.#Run & {
           command: {
-            name: "-c"
-            args: ["microdnf install -y " + strings.Join(packages, " ") + " && microdnf clean all && rm -rf /tmp/* /var/tmp/*"]
+            name: "/bin/sh"
+            args: ["-c", "microdnf install -y " + strings.Join(packages, " ") + " && microdnf clean all && rm -rf /tmp/* /var/tmp/*"]
           }
           "env": {
               env
