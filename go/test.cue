@@ -26,16 +26,17 @@ import(
 		"source": source
 		command: {
 			name: "go"
-			"args": [package, "-race -coverprofile=coverage.txt -covermode=atomic"] + args
+			"args": [package, "-coverprofile=/coverage.txt", "-covermode=atomic"] + args
 			flags: {
 				test: true
 				"-v": true
+        "-race": true
 			}
 		}
     "env": env
-		export: files: "coverage.txt": _
+		export: files: "/coverage.txt": _
 	}
 
 	// file that contain the code coverage
-	output: container.export.files."coverage.txt"
+	output: container.export.files."/coverage.txt"
 }
