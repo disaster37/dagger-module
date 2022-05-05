@@ -69,7 +69,7 @@ _basePackage: [
       docker.#Run & {
         command: {
           name: "/bin/sh"
-          args: ["-c", "microdnf clean all && rm -rf /tmp/* /var/tmp/*")]
+          args: ["-c", "microdnf clean all && rm -rf /tmp/* /var/tmp/*"]
         }
         "env": {
             env
