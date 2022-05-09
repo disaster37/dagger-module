@@ -5,8 +5,8 @@ import(
   "universe.dagger.io/docker"
 )
 
-// Test a go package
-#Test: {
+// Lint a go package
+#Lint: {
 	// Source code
 	source: dagger.#FS
 
@@ -26,17 +26,8 @@ import(
 		"source": source
 		command: {
 			name: "go"
-			"args": [package, "-coverprofile=/coverage.txt", "-covermode=atomic"] + args
-			flags: {
-				test: true
-				"-v": true
-        "-race": true
-			}
+			"args": ["vet", package] + args
 		}
     "env": env
-		export: files: "/coverage.txt": _
 	}
-
-	// file that contain the code coverage
-	output: container.export.directories."/output"
 }
