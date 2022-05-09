@@ -33,9 +33,9 @@ import(
 			}
 		}
     "env": env
-		export: directories: "/output": _
+		export: directories: "/src": _
 	}
 
-	// file that contain the code coverage
-	output: container.export.files."/coverage.txt"
+	// Source folders
+	output: container.export.directories."/src"
 }
