@@ -11,7 +11,7 @@ import(
 	source: dagger.#FS
 
 	// Package to test
-	package: *"./..." | string
+	package: *"./" | string
 
 	args: [...string]
 
