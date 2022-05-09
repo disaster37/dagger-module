@@ -38,5 +38,5 @@ import(
 	}
 
 	// file that contain the code coverage
-	output: container.export.directories."/coverage.txt"
+	output: container.export.files."/coverage.txt"
 }
